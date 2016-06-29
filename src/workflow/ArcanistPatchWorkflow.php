@@ -360,6 +360,8 @@ EOTEXT
   public function run() {
     $source = $this->getSource();
     $param = $this->getSourceParam();
+    $configuration_manager = $this->getConfigurationManager();
+
     try {
       switch ($source) {
         case self::SOURCE_PATCH:
@@ -719,9 +721,17 @@ EOTEXT
           $author_cmd = '';
         }
 
+        $config_key = 'arc.patch.suppress-gpg-signatures';
+        $suppress_signatures = (bool)$configuration_manager->getConfigFromAnySource($config_key);
+        if ($suppress_signatures) {
+          $signature_command = " --no-gpg-sign ";
+        } else {
+          $signature_command = "";
+        }
+
         $commit_message = $this->getCommitMessage($bundle);
         $future = $repository_api->execFutureLocal(
-          'commit -a %C -F - --no-verify',
+          'commit -a %C -F - --no-verify' . $signature_command,
           $author_cmd);
         $future->write($commit_message);
         $future->resolvex();
