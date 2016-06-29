@@ -169,6 +169,16 @@ final class ArcanistSettings extends Phobject {
         'default' => false,
         'example' => 'false',
       ),
+      'arc.patch.suppress-gpg-signatures' => array(
+        'type' => 'bool',
+        'help' => pht(
+          'Whether %s should explicitly tell the repository client not to ' .
+          'GPG sign commits created by `%s`.',
+          'arc',
+          'arc patch'),
+        'default' => true,
+        'example' => 'true',
+      ),
       'aliases' => array(
         'type' => 'aliases',
         'help' => pht(
